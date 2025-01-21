@@ -1,0 +1,9 @@
+# Histogram to visualize the distribution of ratings
+ggplot(anime_data, aes(x = rating)) +
+  geom_histogram(bins = 30, fill = "purple", color = "black", alpha = 0.7) +
+  labs(
+    title = "Histogram of Anime Ratings",
+    x = "Ratings",
+    y = "Frequency"
+  ) +
+  theme_minimal()

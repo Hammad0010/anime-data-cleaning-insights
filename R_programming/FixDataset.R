@@ -1,0 +1,48 @@
+# Load necessary libraries
+library(dplyr)
+library(tidyr)
+library(readr)
+library(RColorBrewer)
+
+
+
+
+# Load the dataset
+anime_data <- read_csv("D:/Universty/R_assignment/anime.csv", show_col_types = FALSE)
+
+view(anime)
+
+# 1. Handling Missing Values
+# Replace missing genres with "Unknown"
+anime_data <- anime_data %>%
+  mutate(genre = ifelse(is.na(genre), "Unknown", genre))
+
+# Replace missing types with "Unknown"
+anime_data <- anime_data %>%
+  mutate(type = ifelse(is.na(type), "Unknown", type))
+
+# Replace missing episodes with NA and keep for further processing
+anime_data <- anime_data %>%
+  mutate(episodes = ifelse(is.na(episodes), NA, episodes))
+
+# Replace missing years with NA and keep for further processing
+anime_data <- anime_data %>%
+  mutate(year = ifelse(is.na(year), NA, year))
+
+# 2. Convert Year Column to Integer
+# Only convert non-missing years to integer
+anime_data <- anime_data %>%
+  mutate(year = ifelse(!is.na(year), as.integer(year), year))
+
+# 3. Remove Potential Duplicates by Selecting Unique Rows
+# Retain only unique rows based on `anime_id`, `title`, `type`, `year`, and `episodes`
+anime_data <- anime_data %>%
+  distinct(anime_id, title, type, year, episodes, .keep_all = TRUE)
+
+# 4. Ensure Episodes Column is Integer
+# Convert episodes to integer if it's non-missing
+anime_data <- anime_data %>%
+  mutate(episodes = ifelse(!is.na(episodes), as.integer(episodes), episodes))
+
+# Save the cleaned dataset
+write_csv(anime_data, "D:/Universty/R_assignment/cleaned_anime_data.csv")
